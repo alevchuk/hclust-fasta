@@ -32,12 +32,14 @@ aaamatrix <- matrix(nrow=length(matrix_dimnames),
                     ncol=length(matrix_dimnames),
                     dimnames=list(matrix_dimnames, matrix_dimnames))
 
-# Use E.value as the distance measure for clustering
+# Use Percent.id as the distance measure for clustering
 invisible(
   Map(function(row, col, distance) aaamatrix[row, col] <<- distance,
     as.character(blast_m8[,'Query']),
     as.character(blast_m8[,'Subject']),
-    as.numeric(blast_m8[,'E.value']))
+    #as.numeric(blast_m8[,'Ali.length']) / as.numeric(blast_m8[,'Percent.id'])
+    log(as.numeric(blast_m8[,'E.value']))
+  )
 )
 
 save(aaamatrix, file=paste(blast_out_file_name, ".aaamatrix.Rdata", sep=""))

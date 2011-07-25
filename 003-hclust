@@ -12,7 +12,7 @@ aaamatrix_file_name <-
 load(aaamatrix_file_name)
 
 # Hierarchical Clustering
-clusters <- hclust(dist(aaamatrix, method = "euclidean"), method="complete")
+clusters <- hclust(as.dist(aaamatrix), method="complete")
 
 # Save
 clusters_file_name <- paste(aaamatrix_file_name, ".clusters.Rdata", sep="")
