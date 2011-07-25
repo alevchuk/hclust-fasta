@@ -2,6 +2,5 @@ formatdb.log
 *.pin
 *.psq
 *.phr
-*.Rdata
 .*.swp
 *~
