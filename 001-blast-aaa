@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Blast All against All
+
+# Fail on unbound variables. E.g. when arguents are not given
+set -u
+
+# Takes 1 argument - the input FASTA file
+fasta_in=$1
+
+formatdb -pT -i $fasta_in
+blastall -m 8 -p blastp -i $fasta_in -d $fasta_in -o $fasta_in.out.m8.tab
+
+# Output description
+##  1. Query (The query sequence id)
+##  2. Subject (The matching subject sequence id)
+##  3. % id
+##  4. alignment length
+##  5. mistmatches
+##  6. gap openings
+##  7. q.start
+##  8. q.end
+##  9. s.start
+## 10. s.end
+## 11. e-value
+## 12. bit score
