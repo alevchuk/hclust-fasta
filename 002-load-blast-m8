@@ -1,0 +1,43 @@
+#!/usr/bin/env Rscript
+
+# Parse arguments
+script_args <- commandArgs(trailingOnly=T)
+fasta_file_name <- script_args[[1]]
+blast_out_file_name <- paste(fasta_file_name, ".blastm8.tab", sep="")
+
+blast_m8 <- read.table(file=blast_out_file_name, header=FALSE)
+# Blast m8 columns
+## 1  Query (The query sequence id)
+## 2  Subject (The matching subject sequence id)
+## 3  % id
+## 4  alignment length
+## 5  mismatches
+## 6  gap openings
+## 7  q.start
+## 8  q.end
+## 9  s.start
+## 10 s.end
+## 11 e-value
+## 12 bit score
+
+colnames(blast_m8) <- c('Query', 'Subject', 'Percent.id', 'Ali.length',
+                        'Mismatches', 'Gap.openings',
+                        'Query.start', 'Query.end', 
+                        'Subject.start', 'Subject.end',
+                        'E.value', 'Bit.score')
+
+# Prepare an empty matrix
+matrix_dimnames <- unique(union(blast_m8[,'Query'], blast_m8[,'Subject']))
+aaamatrix <- matrix(nrow=length(matrix_dimnames),
+                    ncol=length(matrix_dimnames),
+                    dimnames=list(matrix_dimnames, matrix_dimnames))
+
+# Use E.value as the distance measure for clustering
+invisible(
+  Map(function(row, col, distance) aaamatrix[row, col] <<- distance,
+    as.character(blast_m8[,'Query']),
+    as.character(blast_m8[,'Subject']),
+    as.numeric(blast_m8[,'E.value']))
+)
+
+save(aaamatrix, file=paste(blast_out_file_name, ".aaamatrix.Rdata", sep=""))

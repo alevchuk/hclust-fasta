@@ -1,0 +1,25 @@
+#!/usr/bin/env Rscript
+
+library(flashClust)
+
+# Parse arguments
+script_args <- commandArgs(trailingOnly=T)
+fasta_file_name <- script_args[[1]]
+aaamatrix_file_name <-
+  paste(fasta_file_name, ".blastm8.tab.aaamatrix.Rdata", sep="")
+
+# Loads the aaamatrix variable
+load(aaamatrix_file_name)
+
+# Hierarchical Clustering
+clusters <- hclust(dist(aaamatrix, method = "euclidean"), method="complete")
+
+# Save
+clusters_file_name <- paste(aaamatrix_file_name, ".clusters.Rdata", sep="")
+save(file=clusters_file_name, clusters)
+
+png_file_name <- paste(clusters_file_name, ".png", sep="")
+png(file=png_file_name, heigh=400, width=800, type="cairo")
+plot(clusters)
+
+cat(png_file_name, "\n")

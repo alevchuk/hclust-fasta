@@ -9,7 +9,7 @@ set -u
 fasta_in=$1
 
 formatdb -pT -i $fasta_in
-blastall -m 8 -p blastp -i $fasta_in -d $fasta_in -o $fasta_in.out.m8.tab
+blastall -m 8 -p blastp -i $fasta_in -d $fasta_in -o $fasta_in.blastm8.tab
 
 # Output description
 ##  1. Query (The query sequence id)
